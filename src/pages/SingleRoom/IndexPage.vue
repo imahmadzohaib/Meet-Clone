@@ -14,12 +14,7 @@ import { generateRandomId } from '@/utils'
 const route = useRoute()
 const videoConference = ref<HTMLElement | null>(null)
 
-onMounted(() => {
-  // If URL is /room/ABC123
-  // use route.params.roomID
-  //
-  // If URL is /?roomID=ABC123
-  // use route.query.roomID
+onMounted(async() => {
 
   const roomID =
     (route.params.roomID as string) ||
@@ -29,10 +24,15 @@ onMounted(() => {
   const userID = generateRandomId(5)
 
   const appID = Number(import.meta.env.QCLI_ZEGO_APP_ID)
-  const serverSecret = String(import.meta.env.QCLI_ZEGO_SERVER_SECRET)
+    const response = await fetch(
+      `/api/zego-token?userID=${encodeURIComponent(userID)}`
+)
 
 
-  if (!appID || !serverSecret) {
+   const { token } = await response.json()
+
+
+  if (!appID || !token) {
     console.error('ZEGOCLOUD credentials are missing')
     return
   }
@@ -44,7 +44,7 @@ onMounted(() => {
 
   const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
     appID,
-    serverSecret,
+    token,
     roomID,
     userID,
     `user_${Date.now()}`,
