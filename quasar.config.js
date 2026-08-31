@@ -36,6 +36,10 @@ export default defineConfig((/* ctx */) => {
         // browser: 'baseline-widely-available',
         // node: 'node22'
       },
+      env: {
+    VITE_ZEGO_APP_ID: process.env.VITE_ZEGO_APP_ID,
+    VITE_ZEGO_SERVER_SECRET: process.env.VITE_ZEGO_SERVER_SECRET,
+      },
 
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
       // filenameBasedRouting: true,

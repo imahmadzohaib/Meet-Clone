@@ -23,7 +23,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^2.0.4",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@zegocloud/zego-uikit-prebuilt": "^2.18.3",
     "quasar": "^2.27.0",
+    "tailwindcss": "^4.3.3",
     "vue": "^3.5.22",
     "vue-router": "^5.0.6"
   },
