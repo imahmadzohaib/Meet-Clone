@@ -1,13 +1,10 @@
 <template>
-  <div class="fullscreen">
-    <div
-      v-if="error"
-      class="column flex-center full-height q-pa-md text-center"
-    >
+  <div class="room">
+    <div v-if="error" class="room__notice column flex-center text-center">
       <div class="text-h6 q-mb-sm">Can't join this room</div>
       <div class="text-body2 text-grey-7">{{ error }}</div>
     </div>
-    <div v-else ref="videoConference" class="full-height"></div>
+    <div v-else ref="videoConference" class="room__stage"></div>
   </div>
 </template>
 
@@ -99,3 +96,33 @@ onBeforeUnmount(() => {
   zp = null
 })
 </script>
+
+<style lang="scss" scoped>
+.room {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  // 100dvh follows the mobile browser's collapsing toolbars, so the call
+  // controls never end up underneath them. vh is the fallback.
+  height: 100vh;
+  height: 100dvh;
+  // index.html sets viewport-fit=cover, so without this the ZEGOCLOUD UI -
+  // which knows nothing about safe areas - would run under a notch. These
+  // insets are 0 on hardware that has none.
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: #000;
+}
+
+.room__stage {
+  width: 100%;
+  height: 100%;
+}
+
+.room__notice {
+  height: 100%;
+  padding: 16px;
+  background: #fff;
+}
+</style>

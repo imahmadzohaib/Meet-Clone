@@ -1,1 +1,16 @@
 // app global css
+
+// Pull-to-refresh reloading the page mid-call is worse than not having it.
+html,
+body {
+  overscroll-behavior-y: contain;
+}
+
+// Nothing in this app is wide enough to justify a sideways scrollbar on a phone.
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+}

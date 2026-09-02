@@ -7,11 +7,13 @@
     <meta name="description" content="<%= productDescription %>" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="theme-color" content="#757575" />
+    <!-- viewport-fit=cover in every mode so env(safe-area-inset-*) resolves on
+         notched phones; both pages pad themselves with those insets. -->
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover<% } %>"
+      content="width=device-width, initial-scale=1, viewport-fit=cover<% if (ctx.mode.cordova || ctx.mode.capacitor) { %>, maximum-scale=1, minimum-scale=1, user-scalable=no<% } %>"
     />
-
 
     <link
       rel="icon"
