@@ -4,6 +4,10 @@ node_modules
 
 # .env files
 .env*
+!.env.example
+
+# Vercel CLI
+.vercel
 
 # Quasar core related directories
 .quasar

@@ -18,7 +18,8 @@
     "lint": "oxfmt && oxlint --fix",
     "lint:check": "oxfmt --check && oxlint",
     "dev": "quasar dev",
-    "build": "quasar build",
+    "dev:api": "vercel dev",
+    "build": "quasar build && node scripts/check-bundle-secrets.mjs",
     "postinstall": "quasar prepare --silent"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^3.8.1",
+    "@vercel/node": "^10.0.0",
     "autoprefixer": "^10.4.27",
     "oxfmt": "^0.x",
     "oxlint": "^1.x",

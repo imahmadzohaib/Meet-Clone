@@ -2,6 +2,13 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file
 
 import { defineConfig } from '#q-app'
+import { resolve } from 'node:path'
+import { apiDevPlugin } from './scripts/vite-plugin-api-dev.js'
+
+// Vite matches fs.deny patterns against the resolved path with forward slashes,
+// so project-specific rules are anchored here. An unanchored `**/api/**` would
+// also match node_modules/quasar/dist/api.
+const ROOT = resolve('.').replace(/\\/g, '/')
 
 export default defineConfig((/* ctx */) => {
   return {
@@ -36,15 +43,16 @@ export default defineConfig((/* ctx */) => {
         // browser: 'baseline-widely-available',
         // node: 'node22'
       },
-      env: {
-    VITE_ZEGO_APP_ID: process.env.VITE_ZEGO_APP_ID,
-    VITE_ZEGO_SERVER_SECRET: process.env.VITE_ZEGO_SERVER_SECRET,
-      },
+
+      // Deliberately no `env` block. Quasar also auto-loads .env files, so
+      // anything referenced through import.meta.env is inlined as a literal
+      // into the public JS bundle. Server-only values (ZEGO_SERVER_SECRET)
+      // belong in the /api functions, which read process.env at runtime.
 
       // https://v2.quasar.dev/quasar-cli-vite/page-routing-with-vue-router#filename-based-routing
       // filenameBasedRouting: true,
 
-      vueRouterMode: 'hash' // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
 
       // publicPath: '/',
@@ -54,7 +62,39 @@ export default defineConfig((/* ctx */) => {
       // minify: false,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      // `quasar dev` does not run Vercel functions, and Vite would otherwise
+      // serve api/*.js to the browser as transformed modules. This executes
+      // them in Node instead, so local dev matches production.
+      extendViteConf(viteConf) {
+        viteConf.plugins ??= []
+        viteConf.plugins.push(apiDevPlugin())
+
+        // Dev-server file serving. Vite already denies .env by default; this
+        // pins that default so a future Vite change or a stray fs.deny
+        // override cannot silently drop it, and adds this project's own
+        // server-only paths. Note this governs what the dev server hands out
+        // over HTTP - it is not what protects the production bundle. That is
+        // the missing `env` block above.
+        viteConf.server ??= {}
+        viteConf.server.fs ??= {}
+        viteConf.server.fs.strict = true
+        viteConf.server.fs.deny = [
+          // Vite's own defaults, pinned so a future change or a stray
+          // fs.deny override cannot silently drop them.
+          '.env',
+          '.env.*',
+          '*.{crt,pem,key,p12,pfx}',
+          '**/.git/**',
+          // This project's server-only paths, anchored to the root.
+          `${ROOT}/.env*`,
+          `${ROOT}/.vercel/**`,
+          `${ROOT}/api/**`, // handlers + the Token04 helper
+          `${ROOT}/scripts/**`, // build/dev tooling, never client code
+          `${ROOT}/quasar.config.js`,
+          `${ROOT}/vercel.json`
+        ]
+      }
+
       // viteVuePluginOptions: {},
 
       // to write components with JSX/TSX:
