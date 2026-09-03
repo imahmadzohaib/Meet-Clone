@@ -4,7 +4,7 @@ A video conferencing web app built with Quasar (Vue 3) and the ZEGOCLOUD Video
 Conference UIKit. Create a room in one click, share the link, and up to 10
 participants can join from any device.
 
-Live Preview: [https://github.com/imahmadzohaib/Meet-Clone](https://meet-clone-seven.vercel.app/)
+Live Preview: [https://meet-clone-seven.vercel.app](https://meet-clone-seven.vercel.app)
 
 ## Features
 
