@@ -211,10 +211,6 @@ are testing is the one built from that commit.
 registers only autoprefixer and there is no `@import "tailwindcss"` in `src/`. Use
 Quasar's utility classes and scoped SCSS, or set Tailwind up deliberately.
 
-## License
-
-This package is marked `private` and ships without a license file. Add one before
-publishing or accepting outside contributions.
 
 ## Author
 
